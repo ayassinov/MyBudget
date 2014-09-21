@@ -1,0 +1,7 @@
+mybudget:
+  app:
+    mode: TEST
+  graphite:
+      activate: false
+  client:
+    activateMetrics: false

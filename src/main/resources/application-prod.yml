@@ -1,0 +1,12 @@
+mybudget:
+  app:
+    mode: PROD
+    dbUrl: mongodb://localhost/hellocinedb
+  graphite:
+    activate: true
+error:
+  whitelabel:
+    enabled: false
+health:
+  mongodb:
+    enabled: false
