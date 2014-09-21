@@ -1,10 +1,15 @@
 package com.ninjas.mybudget.core.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.joda.time.DateTime;
 
 /**
  * @author ayassinov on 21/09/14.
  */
+@Getter
+@Setter
 public class Transaction {
 
     private Long id;

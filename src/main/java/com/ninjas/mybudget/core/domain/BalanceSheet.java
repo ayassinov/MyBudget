@@ -3,9 +3,14 @@ package com.ninjas.mybudget.core.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author ayassinov on 21/09/14.
  */
+@Getter
+@Setter
 public class BalanceSheet {
 
     private Long id;
