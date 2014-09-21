@@ -1,0 +1,13 @@
+language: java
+jdk:
+- openjdk7
+addons:
+  postgresql: '9.3'
+before_script:
+  - psql -c 'create database mybydget_test;' -U postgres
+deploy:
+  provider: heroku
+  app: getmybudget
+  api_key:
+    secure: WW4U2GTIekePGVAq2IkAdoczch3wPWYoDiRbEgi5UOLsG5ue2PqGm+vdWjcDkgu7ztML5Sru5PkXalLM2wd2cA0dGb/9h2MbRYrvuyoITHv6B8hwnTM1Lwv5jMHQgZRpahG2vfai/+EGVlMcdnVs+NoX+JGMoe4ChTAxtWOXF5g=
+  on: master

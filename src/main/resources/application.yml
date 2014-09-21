@@ -5,7 +5,7 @@ mybudget:
     version: ${pom.version}
     apiVersion: v1
     responseFormat: application/json;utf-8
-    bugSnag: ZZZZZZZZZZ
+    bugSnag: 980dc2bc1f03b3c7233c68707baf2cc6
   dbUrl: mongodb://localhost/hellocinedb
   graphite:
     activate: false

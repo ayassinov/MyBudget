@@ -36,7 +36,7 @@
     <packaging>jar</packaging>
 
     <name>MyBudget</name>
-    <url>http://www.mybudget.fr/</url>
+    <url>http://www.getmybudget.herokuapp.com/</url>
     <description>Get the closets theatre to watch you preferred movies</description>
 
     <licenses>
