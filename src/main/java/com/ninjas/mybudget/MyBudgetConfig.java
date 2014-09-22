@@ -23,6 +23,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +37,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Component
 @ToString
+@Order(value = Ordered.HIGHEST_PRECEDENCE)
 @ConfigurationProperties(prefix = "mybudget")
 public class MyBudgetConfig {
 
@@ -112,10 +115,31 @@ public class MyBudgetConfig {
 
         private String bugSnag = null;
 
-        private String dbUrl = "";
+        private DataBase dataBase;
 
         public AppConfig() {
 
         }
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public static class DataBase {
+
+        @NotNull(message = "Host cannot be null or empty")
+        private String host;
+
+        @NotNull(message = "Data base name cannot be null or empty")
+        private String dataBaseName;
+
+        @NotNull(message = "User name cannot be null or empty")
+        private String userName;
+
+        @NotNull(message = "Password cannot be null or empty")
+        private String password;
+
+        @NotNull(message = "Max connection cannot be null or empty")
+        private int maxConnection;
     }
 }

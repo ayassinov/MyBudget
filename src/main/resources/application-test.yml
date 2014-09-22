@@ -1,6 +1,12 @@
 mybudget:
   app:
     mode: TEST
+    dataBase:
+      host: localhost
+      dataBaseName: mybudget
+      userName: postgres
+      password: root
+      maxConnection: 10
   graphite:
       activate: false
   client:

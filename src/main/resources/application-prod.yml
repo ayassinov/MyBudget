@@ -1,7 +1,12 @@
 mybudget:
   app:
     mode: PROD
-    dbUrl: mongodb://localhost/hellocinedb
+    dataBase:
+      host: localhost
+      dataBaseName: mybudget
+      userName: postgres
+      password: root
+      maxConnection: 10
   graphite:
     activate: true
 error:
