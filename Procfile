@@ -1,1 +1,0 @@
-web: java $JAVA_OPTS -jar -Dserver.port=$PORT -Dspring.profiles.active=prod -javaagent:target/newrelic.jar target/mybudget.jar
