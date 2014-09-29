@@ -1,20 +1,23 @@
+
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>Not found</title>
-	</head>
-	<body>
-{{if eq .RunMode "dev"}}
-{{template "errors/404-dev.html" .}}
-{{else}}
-	{{with .Error}}
-	<h1>
-		{{.Title}}
-	</h1>
-	<p>
-		{{.Description}}
-	</p>
-	{{end}}
-{{end}}
-	</body>
+
+<html>
+<head>
+    <title>My Budget</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="/public/style/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/public/style/main.css">
+
+</head>
+<body ng-app="mybudget">
+
+<div>
+    <ng-view />
+</div>
+
+<script src="/public/js/vendor.js" type="text/javascript" charset="utf-8"></script>
+<script src="/public/js/app.js" type="text/javascript" charset="utf-8"></script>
+</body>
 </html>
+

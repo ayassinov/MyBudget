@@ -1,23 +1,33 @@
-{{set . "title" "Home"}}
-{{template "header.html" .}}
+<!DOCTYPE html>
 
-<header class="hero-unit" style="background-color:#A9F16C">
-  <div class="container">
-    <div class="row">
-      <div class="hero-text">
-        <h1>It works!</h1>
-        <p></p>
-      </div>
-    </div>
-  </div>
-</header>
+<html>
+<head>
+    <title>My Budget</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" type="image/png" href="/public/img/favicon.png">
+    <link rel="stylesheet" type="text/css" href="/public/style/vendor.css">
+    <link rel="stylesheet" type="text/css" href="/public/style/main.css">
 
-<div class="container">
-  <div class="row">
-    <div class="span6">
-      {{template "flash.html" .}}
+</head>
+<body ng-app="mybudget">
+
+<div>
+
+    <div class="column">
+        <div class="ui segment">
+            <a href="/" class="ui button tiny">Home</a>
+            <a href="/category" class="ui button tiny">Category</a>
+        </div>
+
+        <ng-view/>
+
     </div>
-  </div>
+
+
 </div>
 
-{{template "footer.html" .}}
+<script src="/public/js/vendor.js" type="text/javascript" charset="utf-8"></script>
+<script src="/public/js/app.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
+
