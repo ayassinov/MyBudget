@@ -1,6 +1,5 @@
 package main
 
-
 import (
 
 	"github.com/coopernurse/gorp"
@@ -8,10 +7,8 @@ import (
 	_ "github.com/lib/pq"
 	"database/sql"
 	"log"
-	//"./entity/User"
 
 )
-
 
 func main() {
 	// initialize the DbMap
@@ -40,7 +37,6 @@ type User struct {
 	LName   string
 	Email   string
 }
-
 
 func initDb() *gorp.DbMap {
 
