@@ -1,4 +1,4 @@
-package model
+package domain
 
 import (
 	_ "github.com/mattn/go-sqlite3"
@@ -16,6 +16,15 @@ const (
 	GoalBudget BudgetType   = "GOAL_BUDGET"
 	NormalBudget BudgetType = "NORMAL_BUDGET"
 )
+
+type User struct {
+	Id      int64
+	Created int64
+	Updated int64
+	FName   string
+	LName   string
+	Email   string
+}
 
 type Category struct {
 	Id                      int64
