@@ -1,105 +1,76 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
-	"github.com/coopernurse/gorp"
-	_ "github.com/mattn/go-sqlite3"
-	_ "github.com/lib/pq"
-	"database/sql"
+	"os"
+	"fmt"
 	"github.com/gorilla/mux"
-	"encoding/json"
+	"github.com/codegangsta/negroni"
 )
 
-
-type User struct {
-	Id      int64
-	Created int64
-	Updated int64
-	FName   string
-	LName   string
-	Email   string
-}
-
-type users []User
+var (
+	port string
+	n *negroni.Negroni
+	r *mux.Router
+)
 
 func main() {
-
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
-	router.HandleFunc("/users", getAllUsers)
-	router.HandleFunc("/todos/{todoId}", TodoShow)
-
-	log.Fatal(http.ListenAndServe(":8080", router))
+	loadParameters()
+	configRoutes()
+	addMiddleWare()
+	runServer()
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "what did you expect :p ")
+func configRoutes() {
+	r := mux.NewRouter().StrictSlash(false)
+	r.HandleFunc("/", defaultHandler)
+
+	// Posts collection
+	posts := r.Path("/categories").Subrouter()
+	posts.Methods("GET").HandlerFunc(defaultHandler)
+	posts.Methods("POST").HandlerFunc(defaultHandler)
+
+	// Posts singular
+	post := r.PathPrefix("/categories/{id}").Subrouter()
+	post.Methods("GET").Path("/edit").HandlerFunc(defaultHandler)
+	post.Methods("GET").HandlerFunc(defaultHandler)
+	post.Methods("PUT", "POST").HandlerFunc(defaultHandler)
+	post.Methods("DELETE").HandlerFunc(defaultHandler)
 }
 
-func getAllUsers(w http.ResponseWriter, r *http.Request) {
-	// initialize the DbMap
-	dbmap := initDb()
-	defer dbmap.Db.Close()
+func addMiddleWare() {
+	n := negroni.Classic()
+	n.Use(negroni.HandlerFunc(printAnyIdVarMiddleware))
+	n.UseHandler(r)
+}
 
-	count, err := dbmap.SelectInt("select count(*) from users")
-	checkErr(err, "select count(*) failed")
-	log.Println("Rows after inserting:", count)
+func runServer() {
+	fmt.Println("Starting server on :", port)
+	http.ListenAndServe(":"+port, n)
+}
 
-	users := make([]User, int(count), 15)
+func defaultHandler(rw http.ResponseWriter, r *http.Request) {
+	fmt.Println("vars", mux.Vars(r)["id"])
 
-	var dd []User
-	_, err = dbmap.Select(&dd, "SELECT * FROM users")
+	rw.Write([]byte("hello GUYS"))
+}
 
-	checkErr(err, "Select failed")
+func handleDefaultResponse(rw http.ResponseWriter, r *http.Request) {
+	rw.Write([]byte("hello GUYS"))
+}
 
-	n := 0
-	for _, user := range dd {
-		users[n] = User{Id:user.Id,Created:user.Created,Updated:user.Updated,FName:user.FName,LName:user.LName,Email:user.Email}
-		log.Println("Last name Nom : ",user.LName,"",user.FName)
-		n++
+func printAnyIdVarMiddleware(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	idValue := mux.Vars(r)["id"]
+	if (idValue != "") {
+		fmt.Println("Path id value is:", idValue)
 	}
 
-	json.NewEncoder(w).Encode(users)
+	next(rw, r)
 }
 
-func TodoShow(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	todoId := vars["todoId"]
-	fmt.Fprintln(w, "Todo show:", todoId)
-}
-
-
-func initDb() *gorp.DbMap {
-
-	var db *sql.DB
-	var err error
-	// connect to db using standard Go database/sql API
-	// use whatever database/sql driver you wish
-	db, err = sql.Open("postgres", "user=postgres dbname=mybudget host=localhost password=postgres sslmode=disable")
-
-	checkErr(err, "sql.Open failed")
-
-	// construct a gorp DbMap
-	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
-
-	// add a table, setting the table name to 'user' and
-	// specifying that the Id property is an auto incrementing PK
-	dbmap.AddTableWithName(User{}, "users").SetKeys(true, "Id")
-
-	// create the table. in a production system you'd generally
-	// use a migration tool, or create the tables via scripts
-	err = dbmap.CreateTablesIfNotExists()
-	checkErr(err, "Create tables failed")
-
-	return dbmap
-}
-
-
-
-func checkErr(err error, msg string) {
-	if err != nil {
-		log.Fatalln(msg, err)
+func loadParameters() {
+	port = os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
 }
