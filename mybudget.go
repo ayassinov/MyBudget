@@ -4,10 +4,15 @@ import (
 	"net/http"
 
 	"github.com/codegangsta/negroni"
+	"github.com/parisianninjas/mybudget/datastore"
 	"github.com/parisianninjas/mybudget/handlers"
 )
 
 func main() {
+
+	datastore.Connect(true, false)
+	defer datastore.Close()
+
 	m := http.NewServeMux()
 	m.Handle("/api/", http.StripPrefix("/api", handlers.HandleAPI()))
 

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -16,5 +17,13 @@ func writeJSON(w http.ResponseWriter, v interface{}) error {
 
 	w.Header().Set("content-type", "application/json; charset=utf-8")
 	_, err = w.Write(data)
+	return err
+}
+
+// checkErr is convient function that check the error and log the message
+func checkErr(err error, msg string) error {
+	if err != nil {
+		log.Fatalln(msg, err)
+	}
 	return err
 }
