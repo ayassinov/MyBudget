@@ -8,14 +8,18 @@ import (
 
 //Category of the budget
 type Category struct {
-	ID          int64     `json:"id,omitempty"`
-	ParentID    int64     `json:"-"`
-	Parent      *Category `db:"-"` //TODO(yab) how to manage a recursive Category ?
-	Name        string
-	Description string
-	CreatedAt   int64 `json:"-"`
-	UpdatedAt   int64 `json:"-"`
+	ID       int64  `json:"-"`
+	Code     string `json:"code"`
+	ParentID *int64 `json:"parent_id"`
+	//	Categories
+	//Parent      *Category `db:"-"` //TODO(yab) how to manage a recursive Category ?
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"-"`
+	UpdatedAt   time.Time `json:"-"`
 }
+
+type Categories []Category
 
 //CategoryStore interface to implement for the
 type CategoryStore interface {
@@ -72,13 +76,13 @@ func (c CategoryStoreImpl) Update(category *Category) error {
 
 //PreInsert update the creation and update date when saving a category
 func (i *Category) PreInsert(s gorp.SqlExecutor) error {
-	i.CreatedAt = time.Now().UnixNano()
+	i.CreatedAt = time.Now()
 	i.UpdatedAt = i.CreatedAt
 	return nil
 }
 
 //PreUpdate update the update date when updating a category
 func (i *Category) PreUpdate(s gorp.SqlExecutor) error {
-	i.UpdatedAt = time.Now().UnixNano()
+	i.UpdatedAt = time.Now()
 	return nil
 }

@@ -6,6 +6,8 @@ import (
 	"github.com/codegangsta/negroni"
 	"github.com/parisianninjas/mybudget/datastore"
 	"github.com/parisianninjas/mybudget/handlers"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {

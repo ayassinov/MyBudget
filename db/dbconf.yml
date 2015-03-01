@@ -1,0 +1,7 @@
+development:
+    driver: postgres
+    open: user=postgres dbname=mybudget host=localhost password=root sslmode=disable
+
+production:
+    driver: postgres
+    open: $DATABASE_URL

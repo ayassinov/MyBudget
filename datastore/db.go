@@ -7,8 +7,8 @@ import (
 	"sync"
 
 	"gopkg.in/gorp.v1"
+
 	//forcing the import of the postgres driver used by gorp
-	_ "github.com/lib/pq"
 )
 
 // DB is the global database.
@@ -60,8 +60,9 @@ func createabase() {
 
 	// create the table. in a production system you'd generally
 	// use a migration tool, or create the tables via scripts
-	var err = DB.CreateTablesIfNotExists()
-	checkErr(err, "Create tables failed")
+	//var err = DB.CreateTablesIfNotExists()
+	//var err := nil
+	checkErr(nil, "Create tables failed")
 }
 
 func dropDatabase() error {
