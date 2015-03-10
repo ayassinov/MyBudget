@@ -67,7 +67,7 @@ func handleListCategory(w http.ResponseWriter, r *http.Request) error {
 }
 
 func handleCreateCategory(w http.ResponseWriter, r *http.Request) error {
-	c := &datastore.Category{Name: "Hello", Description: "Yo"}
+	c := &datastore.Category{Name: "Hello"/*, Description: "Yo"*/}
 	err := categoryStore.Create(c)
 	if err != nil {
 		return err

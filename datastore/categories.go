@@ -8,17 +8,18 @@ import (
 
 //Category of the budget
 type Category struct {
-	ID       int64  `json:"-"`
-	Code     string `json:"code"`
-	ParentID *int64 `json:"parent_id"`
-	//	Categories
-	//Parent      *Category `db:"-"` //TODO(yab) how to manage a recursive Category ?
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	CreatedAt   time.Time `json:"-"`
-	UpdatedAt   time.Time `json:"-"`
+	ID            int64      `json:"id" db:"cat_id"`
+	ParentID      *int64     `json:"-" db:"parent_cat_id"`
+	Parent        *Category  `json:"parent_category"`
+	SubCategories Categories `json:"sub_categories"`
+	Name          string     `json:"name" db:"cat_name"`
+	Description   *string    `json:"description" db:"cat_description"`
+	Default       bool       `json:"default" db:"cat_default"`
+	CreatedAt     time.Time  `json:"-" db:"cat_createdat"`
+	UpdatedAt     time.Time  `json:"-" db:"cat_updatedat"`
 }
 
+//Categories is a list of category type
 type Categories []Category
 
 //CategoryStore interface to implement for the
@@ -42,10 +43,25 @@ type CategoryStoreImpl struct { /* TODO(yab) add db *gorp.DbMap ?*/
 }
 
 //Get ...
-func (c CategoryStoreImpl) Get(id int) (*Category, error) {
-	obj, err := DB.Get(Category{}, id)
-	res := obj.(*Category)
-	return res, err
+func (c CategoryStoreImpl) Get(id int) (Category, error) {
+
+	var cat = Category{}
+	err := DB.SelectOne(&cat, "select * from bdg_category where cat_id =$1", id)
+
+	if err == nil && cat.ParentID != nil {
+		err = DB.SelectOne(&cat.Parent, "select * from bdg_category where cat_id=$1", cat.ParentID)
+	}
+
+	if err == nil {
+		var categories Categories
+		_, err = DB.Select(&categories, "select * from bdg_category where parent_cat_id = :Key", map[string]interface{}{
+			"Key": id,
+		})
+
+		cat.SubCategories = categories
+	}
+
+	return cat, err
 }
 
 //List ...

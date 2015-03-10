@@ -56,7 +56,7 @@ func Close() {
 func createabase() {
 	// add a table, setting the table name to 'posts' and
 	// specifying that the Id property is an auto incrementing PK
-	DB.AddTableWithName(Category{}, "mb_category").SetKeys(true, "ID")
+	DB.AddTableWithName(Category{}, "bdg_category").SetKeys(true, "ID")
 
 	// create the table. in a production system you'd generally
 	// use a migration tool, or create the tables via scripts
