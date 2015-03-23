@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS bdg_payee (
 --split transaction between many account or budget can be done from UI as result we will create as many transaction as
 -- the user wanted....we may need a table that associate them together...
 -- grouped_transaction(id, transaction_id, the grouping or the reason name)
-
+-- add a S - (Starting) transaction when create a new account....
 --Transaction
 CREATE TABLE IF NOT EXISTS bdg_transaction (
   id         SERIAL PRIMARY KEY          NOT NULL,
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS bdg_transaction (
   FOREIGN KEY (payee_id) REFERENCES bdg_payee (id),
   FOREIGN KEY (account_id) REFERENCES bdg_account (id),
   CONSTRAINT CTR_UNIQUE_TRANSACTION UNIQUE (date_id, budget_id, payee_id, account_id),
-  CHECK (type IN ('TRA', 'TRS', 'STB', 'REC'))
+  CHECK (type IN ('I', 'O', 'T', 'R', 'S'))
 );
 
 

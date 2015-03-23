@@ -89,6 +89,10 @@ INSERT INTO bdg_category (parent_id, user_id, name) VALUES (2, NULL, 'Clothes');
 INSERT INTO bdg_category (parent_id, user_id, name) VALUES (3, NULL, 'Emergency fund');
 INSERT INTO bdg_category (parent_id, user_id, name) VALUES (3, NULL, 'Birthdays');
 
+--special category to add in every user plan
+INSERT INTO bdg_category (parent_id, user_id, name, isdefault, listed) VALUES (NULL, NULL, 'Income', 1, 0);
+INSERT INTO bdg_category (parent_id, user_id, name, isdefault, listed) VALUES (NULL, NULL, 'Transfer', 1, 0);
+INSERT INTO bdg_category (parent_id, user_id, name, isdefault, listed) VALUES (NULL, NULL, 'Reconciliation', 1, 0);
 
 INSERT INTO bdg_budget (plan_id, category_id) VALUES (1, 4);
 INSERT INTO bdg_budget (plan_id, category_id) VALUES (1, 5);
@@ -119,7 +123,7 @@ INSERT INTO bdg_budget_date (budget_id, date_id, budgeded) VALUES (11, 1, 20);
 
 
 INSERT INTO bdg_transaction (date_id, budget_id, account_id, amount, valuedate) VALUES (1, 1, 1, -1200, now());
-
+INSERT INTO bdg_transaction (date_id, budget_id, account_id, amount, valuedate, type) VALUES (1, 1, 1, 3255, now(), 'I');
 
 -- +goose Down
 -- SQL section 'Down' is executed when this migration is rolled back
