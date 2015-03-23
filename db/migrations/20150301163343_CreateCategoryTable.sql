@@ -83,8 +83,6 @@ CREATE TABLE IF NOT EXISTS bdg_category (
   name        VARCHAR(100)                NOT NULL,
   description VARCHAR(255),
   isdefault   BOOLEAN                                        DEFAULT FALSE, --if true then a default category
-  createdat   TIMESTAMP WITHOUT TIME ZONE NOT NULL           DEFAULT now(),
-  updatedat   TIMESTAMP WITHOUT TIME ZONE NOT NULL           DEFAULT now(),
   FOREIGN KEY (parent_id) REFERENCES bdg_category (id),
   CONSTRAINT CTR_CATEGORY_PARENT_NAME UNIQUE (id, user_id, parent_id, name)
 );

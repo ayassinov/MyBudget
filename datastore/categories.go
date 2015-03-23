@@ -1,22 +1,19 @@
 package datastore
 
-import (
-	"time"
-
-	"gopkg.in/gorp.v1"
-)
+import "gopkg.in/gorp.v1"
 
 //Category of the budget
 type Category struct {
-	ID            int64      `json:"id" db:"cat_id"`
-	ParentID      *int64     `json:"-" db:"parent_cat_id"`
+	ID            int64      `json:"id" db:"id"`
+	ParentID      *int64     `json:"-" db:"parent_id"`
+	UserID        *int64     `json:"-" db:"user_id"`
 	Parent        *Category  `json:"parent_category"`
 	SubCategories Categories `json:"sub_categories"`
-	Name          string     `json:"name" db:"cat_name"`
-	Description   *string    `json:"description" db:"cat_description"`
-	Default       bool       `json:"default" db:"cat_default"`
-	CreatedAt     time.Time  `json:"-" db:"cat_createdat"`
-	UpdatedAt     time.Time  `json:"-" db:"cat_updatedat"`
+	Name          string     `json:"name"`
+	Description   *string    `json:"description"`
+	Default       bool       `json:"default" db:"isdefault"`
+	//CreatedAt     time.Time  `json:"-" db:"cat_createdat"`
+	//UpdatedAt     time.Time  `json:"-" db:"cat_updatedat"`
 }
 
 //Categories is a list of category type
@@ -46,15 +43,15 @@ type CategoryStoreImpl struct { /* TODO(yab) add db *gorp.DbMap ?*/
 func (c CategoryStoreImpl) Get(id int) (Category, error) {
 
 	var cat = Category{}
-	err := DB.SelectOne(&cat, "select * from bdg_category where cat_id =$1", id)
+	err := DB.SelectOne(&cat, "select * from bdg_category where id =$1", id)
 
 	if err == nil && cat.ParentID != nil {
-		err = DB.SelectOne(&cat.Parent, "select * from bdg_category where cat_id=$1", cat.ParentID)
+		err = DB.SelectOne(&cat.Parent, "select * from bdg_category where id=$1", cat.ParentID)
 	}
 
 	if err == nil {
 		var categories Categories
-		_, err = DB.Select(&categories, "select * from bdg_category where parent_cat_id = :Key", map[string]interface{}{
+		_, err = DB.Select(&categories, "select * from bdg_category where parent_id = :Key", map[string]interface{}{
 			"Key": id,
 		})
 
@@ -71,7 +68,7 @@ func (c CategoryStoreImpl) List(page int, count int) ([]*Category, error) {
 		page = 0
 	}
 
-	query := "select * from mb_category order by id offset $1 limit $2"
+	query := "select * from bdg_category order by id offset $1 limit $2"
 
 	var list []*Category
 	_, err := DB.Select(&list, query, page, count)
@@ -92,13 +89,13 @@ func (c CategoryStoreImpl) Update(category *Category) error {
 
 //PreInsert update the creation and update date when saving a category
 func (i *Category) PreInsert(s gorp.SqlExecutor) error {
-	i.CreatedAt = time.Now()
-	i.UpdatedAt = i.CreatedAt
+	//i.CreatedAt = time.Now()
+	//i.UpdatedAt = i.CreatedAt
 	return nil
 }
 
 //PreUpdate update the update date when updating a category
 func (i *Category) PreUpdate(s gorp.SqlExecutor) error {
-	i.UpdatedAt = time.Now()
+	//i.UpdatedAt = time.Now()
 	return nil
 }
