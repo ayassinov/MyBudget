@@ -27,3 +27,13 @@ func checkErr(err error, msg string) error {
 	}
 	return err
 }
+
+func notFoundAPI(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	//var nf = &NotFoundResponse{}
+	writeJSON(w, nil)
+}
+
+func notFoundWEB(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "public/index.html")
+}

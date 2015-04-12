@@ -19,7 +19,15 @@ func HandleAPI() *mux.Router {
 	m.Get(routes.GetCategory).Handler(handler(handleGetCategory))
 	m.Get(routes.ListCategories).Handler(handler(handleListCategory))
 	m.Get(routes.CreateCategory).Handler(handler(handleCreateCategory))
+	m.NotFoundHandler = http.HandlerFunc(notFoundAPI)
 	return m
+}
+
+func HandleWEB() *mux.Router {
+	router := mux.NewRouter()
+	router.PathPrefix("/").HandlerFunc(notFoundWEB)
+	router.NotFoundHandler = http.HandlerFunc(notFoundWEB)
+	return router
 }
 
 type handler func(http.ResponseWriter, *http.Request) error
@@ -67,7 +75,7 @@ func handleListCategory(w http.ResponseWriter, r *http.Request) error {
 }
 
 func handleCreateCategory(w http.ResponseWriter, r *http.Request) error {
-	c := &datastore.Category{Name: "Hello"/*, Description: "Yo"*/}
+	c := &datastore.Category{Name: "Hello" /*, Description: "Yo"*/}
 	err := categoryStore.Create(c)
 	if err != nil {
 		return err
